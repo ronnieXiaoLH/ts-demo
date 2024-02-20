@@ -99,3 +99,123 @@ const arr2: readonly number[] = [1, 2, 3]
 - instanceof 类型守卫
 - in 运算符类型守卫
 - 自定义类型守卫
+
+### 泛型
+
+泛型数据：定义时不指定具体数据类型，调用时再确定类型。
+
+泛型形参一般有两种表示：
+
+1. A-Z 任何一个字母
+2. 语义化的单词
+
+### keyof 和 typeof 类型运算符
+
+- `keyof` 类型运算符用于获取对象类型的所有键（属性名）的联合类型。
+- `typeof` 类型运算符用于获取一个值的类型信息。
+
+### 索引访问属性
+
+索引访问类型（Index Access Types）是一种强大的特性，它允许你通过一个类型的索引来获取相应的属性类型。这在处理动态数据结构，如对象字面量或动态键的对象时非常有用。
+
+### 条件类型
+
+条件类型（Conditional Types）是一种高级的类型操作，它允许你在类型系统中进行基于条件的分支选择。条件类型通常使用在泛型类型中，根据某个条件选择不同的类型分支。
+
+条件类型的一般形式如下：
+
+```ts
+T extends U ? X : Y
+```
+
+这里，T 是待检查的类型，U 是检查的条件类型，如果 T 是 U 的子类型（或者可以赋值给 U），则结果类型是 X，否则是 Y。
+
+### infer
+
+`infer` 关键字通常用于在泛型类型中引入类型推断。它允许你在泛型类型定义中引入一个新的类型变量，并在使用这个泛型类型时推断出具体的类型。
+
+具体来说，`infer` 通常与 extends 关键字一起使用。
+
+```ts
+type ExtractReturnType<T> = T extends (...args: any[]) => infer R ? R : never
+
+function exampleFunction(): string {
+  return 'Hello, TypeScript!'
+}
+
+const result: ExtractReturnType<typeof exampleFunction> = 'Hello again!'
+```
+
+在上面的例子中，ExtractReturnType 是一个泛型类型，接受一个函数类型 T。通过使用 extends 和 infer，它检查 T 是否为一个函数类型，如果是的话，就推断出函数的返回类型，并将其赋给变量 R。在这个例子中，result 的类型被推断为 string，因为 exampleFunction 是一个返回字符串的函数。
+
+```ts
+type ExtractArrayElementType<T> = T extends Array<infer U> ? U : never
+
+const arrayExample: ExtractArrayElementType<string[]> = 'Hello' // 类型被推断为 string
+```
+
+在上述示例中，ExtractArrayElementType 使用 infer 来捕获数组元素的类型，并根据输入类型 T 条件性地返回这个类型。
+
+### Extract
+
+`Extract` 是一个用于从联合类型中提取符合指定类型的子集的工具类型。它通过从给定的联合类型中选择那些可以赋值给指定类型的部分，创建一个新的类型。
+
+基本语法如下：
+
+```ts
+type Extract<T, U> = T extends U ? T : never
+```
+
+这里的 T 是要从中提取类型的联合类型，而 U 是要提取的目标类型。Extract 会检查 T 中的每个成员，如果该成员是 U 的子类型，则将其包括在最终的结果中；否则，将其排除。
+
+### Exclude
+
+`Exclude` 是一个用于从联合类型中排除符合指定类型的子集的工具类型。它通过从给定的联合类型中排除那些可以赋值给指定类型的部分，创建一个新的类型。
+
+基本语法如下：
+
+```ts
+type Exclude<T, U> = T extends U ? never : T
+```
+
+这里的 T 是要从中排除类型的联合类型，而 U 是要排除的目标类型。Exclude 会检查 T 中的每个成员，如果该成员是 U 的子类型，则将其排除在最终的结果中；否则，将其包括。
+
+### Record
+
+`Record` 是一个泛型类型，用于表示对象的类型，其中键和值的类型都是泛型参数。Record 类型有助于定义具有特定键和值类型的对象类型。
+
+基本语法如下：
+
+```ts
+type MyRecord<K extends string | number | symbol, T> = Record<K, T>
+```
+
+这里，K 代表键的类型，可以是字符串、数字或符号，而 T 代表值的类型。使用 Record 时，你需要指定这两个泛型参数。
+
+### Pick
+
+`Pick` 是一个通用工具类型（Utility Type），用于从对象类型中选择指定的属性，然后创建一个新的类型。Pick 接受两个参数：第一个参数是源类型（原始类型），第二个参数是一个或多个属性名的字符串字面量联合类型，表示要选择的属性。
+
+基本语法如下：
+
+```ts
+type PickedType = Pick<SourceObjectType, 'Prop1' | 'Prop2' | 'Prop3'>
+```
+
+这里，SourceObjectType 是源类型，即从中选择属性的类型。'Prop1' | 'Prop2' | 'Prop3'是一个字符串字面量联合类型，表示要选择的属性名。
+
+### 映射类型
+
+映射类型是一种强大的工具，它允许你创建新类型，该类型基于现有类型的属性集合进行转换。映射类型使用索引签名和 keyof 关键字来实现，让你能够以一种通用的方式处理现有类型的属性。
+
+### Capitalize
+
+`Capitalize` 是一个内置的类型工具（Type Utility），它用于将字符串的第一个字符转换为大写形式。这个类型接受一个字符串类型作为参数，并返回一个新的字符串类型，其中第一个字母被转换为大写。
+
+### Required & Partial & Readonly
+
+- `Required` 是一个泛型类型，接受一个类型参数 T，并返回一个新的类型，该新类型要求 T 中的所有属性都变为必需属性（非可选属性）。
+
+- `Partial` 也是一个泛型类型，接受一个类型参数 T，并返回一个新的类型，该新类型将 T 中的所有属性都变为可选属性。
+
+- `Readonly` 也是一个泛型类型，接受一个类型参数 T，并返回一个新的类型，该新类型将 T 中的所有属性变为只读属性，防止在实例化后修改这些属性的值。
