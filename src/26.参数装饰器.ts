@@ -25,3 +25,24 @@ import 'reflect-metadata'
     }
   }
 }
+
+{
+  function logParameter(
+    targetClassPrototype: object,
+    propertyKey: string,
+    parameterIndex: number
+  ) {
+    console.log(`The parameter in position ${parameterIndex} at ${propertyKey} has
+    been decorated`)
+  }
+
+  class Greeter {
+    greeting: string
+
+    constructor(greeting: string) {
+      this.greeting = greeting
+    }
+
+    sayHi(@logParameter param: string) {}
+  }
+}

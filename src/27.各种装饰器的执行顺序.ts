@@ -112,4 +112,36 @@ const metadataKey = Symbol()
   }
 }
 
+console.log('-------------------------------')
+
+function methodDecorator(
+  targetClassPrototype: object,
+  methodName: string,
+  descriptor: PropertyDescriptor
+) {
+  // 获取在属性装饰器中定义的元数据
+  console.log(
+    '方法装饰器',
+    Reflect.getMetadata(metadataKey, targetClassPrototype, 'name')
+  )
+}
+
+function propertyDecorator(value: string) {
+  console.log('属性装饰器')
+  return Reflect.metadata(metadataKey, value)
+}
+class Person {
+  @propertyDecorator('元数据的值')
+  name: string
+
+  constructor(name: string) {
+    this.name = name
+  }
+
+  @methodDecorator
+  sayHi(message: string) {
+    console.log(`Hi ${message}`)
+  }
+}
+
 export {}

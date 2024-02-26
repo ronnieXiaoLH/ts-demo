@@ -19,3 +19,15 @@
   type nameOrAge = 'name' | 'age' // 字面量（模板字面）类型
   type I3 = Person[nameOrAge] // 类型是 string | number
 }
+
+{
+  const MyArray = [
+    { name: 'Alice', age: 15 },
+    { name: 'Bob', age: 23 },
+    { name: 'Eve', age: 38 }
+  ]
+
+  type Person = (typeof MyArray)[number] // 类型为 {name: string; age: number}
+
+  type Age = (typeof MyArray)[number]['age'] // 类型为 number
+}

@@ -19,13 +19,13 @@
     constructor(public name: string) {}
 
     @logMethod
-    sayHi() {
-      console.log(`Hello ${this.name}`)
+    sayHi(message: string) {
+      console.log(`Hello ${message}`)
     }
   }
 
   const p = new Person('Mark')
-  p.sayHi()
+  p.sayHi('TypeScript')
   console.log('---------------------')
 }
 
